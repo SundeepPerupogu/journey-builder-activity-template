@@ -8,15 +8,27 @@
     "type": "REST",
     "lang": {
         "en-US": {
-            "name": "Template",
-          "description": "A Template for a custom Journey Builder activity",
-          "step1Label": "Configure Activity"
+             "name": "Custom Activity ComponentDateTimeDelta",
+             "description": "Journey Builder Custom Activity for Date time Delta API v1.1 format."
+             "step1Label": "Configure Activity"
         }
     },
     "arguments": {
         "execute": {
-           "inArguments":[],
-          "outArguments": [],
+           "inArguments":[
+          {
+          //  "staticValue": "2024-12-18 01:06:51",
+            "future_date": "{{InteractionDefaults.TriggerTime}}"
+          },
+          {
+            "user_timezone": "{{Contact.Default.timezone}}"
+          }
+        ],,
+          "outArguments": [
+              {
+                "foundSignupDate": ""
+              }
+            ],
           "url": "https://journey-builder-activity-template-lnph.onrender.com",
            "verb": "POST",
             "body": "",
@@ -61,8 +73,31 @@
     "schema": {
         "arguments": {
             "execute": {
-                "inArguments": [],
-                "outArguments": []
+                "inArguments": [
+            {
+              "future_date": {
+                "dataType": "Date",
+                "isNullable": false,
+                "direction": "in"
+              }
+            },
+            {
+              "user_timezone": {
+                "dataType": "Text",
+                "isNullable": false,
+                "direction": "in"
+              }
+            }
+          ],
+          "outArguments": [
+             {
+              "foundSignupDate": {
+                "dataType": "Delta",
+                "direction": "out",
+                "access": "visible"
+                }
+              }
+             ]
             }
         }
     }
