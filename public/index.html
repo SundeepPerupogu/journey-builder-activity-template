@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Time Difference Calculator</title>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,8 +30,17 @@
         <div class="slds-grid">
 
             <main class="slds-col slds-size--1-of-3 slds-p-horizontal--small">
-              <h1>Welcome to your activity!</h1>
-
+              <h1>Calculate Time Difference</h1>
+            <form id="time-difference-form">
+                <label for="future_date">Future Date (YYYY-MM-DD HH:MM:SS):</label>
+                <input type="text" id="future_date" name="future_date" required>
+                <br>
+                <label for="user_timezone">Your Time Zone:</label>
+                <input type="text" id="user_timezone" name="user_timezone" required>
+                <br>
+                <button type="submit">Calculate</button>
+            </form>
+            <p id="result"></p>
             </main>
            
             
