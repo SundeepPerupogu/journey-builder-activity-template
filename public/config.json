@@ -15,7 +15,14 @@
     },
     "arguments": {
         "execute": {
-           "inArguments":[],
+           "inArguments":[
+        {
+          "futureUtcTime": ""
+        },
+        {
+          "userTimeZone": ""
+        }
+      ],
           "outArguments": [],
           "url": "https://journey-builder-activity-template-lnph.onrender.com/execute",
            "verb": "POST",
@@ -62,7 +69,15 @@
         "arguments": {
             "execute": {
                 "inArguments": [],
-                "outArguments": []
+                "outArguments": [
+          {
+            "timeDifference": {
+              "dataType": "Text",
+              "isNullable": false,
+              "direction": "out"
+            }
+          }
+        ]
             }
         }
     }
