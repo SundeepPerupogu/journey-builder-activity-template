@@ -13,9 +13,9 @@
           "step1Label": "Configure Activity"
         }
     },
-    "arguments": {
-        "execute": {
-           "inArguments":[
+  "arguments": {
+    "execute": {
+      "inArguments": [
         {
           "futureUtcTime": ""
         },
@@ -23,7 +23,14 @@
           "userTimeZone": ""
         }
       ],
-          "outArguments": [],
+      "outArguments": [
+        {
+          "timeDifference": {
+            "dataType": "Text",
+            "isNullable": false
+          }
+        }
+      ],
           "url": "https://journey-builder-activity-template-lnph.onrender.com/execute",
            "verb": "POST",
             "body": "",
@@ -68,14 +75,23 @@
     "schema": {
         "arguments": {
             "execute": {
-                "inArguments": [],
-                "outArguments": [
+        "inArguments": [
           {
-            "timeDifference": {
-              "dataType": "Text",
-              "isNullable": false,
-              "direction": "out"
-            }
+            "name": "futureUtcTime",
+            "dataType": "Text",
+            "isNullable": false
+          },
+          {
+            "name": "userTimeZone",
+            "dataType": "Text",
+            "isNullable": false
+          }
+        ],
+        "outArguments": [
+          {
+            "name": "timeDifference",
+            "dataType": "Text",
+            "isNullable": false
           }
         ]
             }
