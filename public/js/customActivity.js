@@ -8,6 +8,10 @@ define([
     var connection = new Postmonger.Session();
     var authTokens = {};
     var payload = {};
+    var steps = [
+        { label: 'Configure Activity', key: 'step1' }
+    ];
+    var currentStep = steps[0].key;
     $(window).ready(onRender);
 
     connection.on('initActivity', initialize);
@@ -16,7 +20,8 @@ define([
     connection.on('requestedInteraction', onRequestedInteraction);
     connection.on('requestedTriggerEventDefinition', onRequestedTriggerEventDefinition);
     connection.on('requestedDataSources', onRequestedDataSources);
-
+    connection.on('clickedBack', onClickedBack);
+    connection.on('gotoStep', onGotoStep);
     connection.on('clickedNext', save);
    
     function onRender() {
@@ -64,10 +69,13 @@ define([
         console.log(inArguments);
 
         $.each(inArguments, function (index, inArgument) {
-            $.each(inArgument, function (key, val) {
-                
-              
-            });
+            if (inArgument.futureUtcTime) {
+                $('#future-utc-time').val(inArgument.futureUtcTime);
+            }
+
+            if (inArgument.userTimeZone) {
+                $('#user-time-zone').val(inArgument.userTimeZone);
+            }
         });
 
         connection.trigger('updateButton', {
@@ -86,12 +94,37 @@ define([
         console.log(endpoints);
     }
 
+    function onClickedNext() {
+        save();
+        connection.trigger('nextStep');
+    }
+
+    function onClickedBack() {
+        connection.trigger('prevStep');
+    }
+
+    function onGotoStep(step) {
+        showStep(step);
+        connection.trigger('ready');
+    }
+
+    function showStep(step) {
+        currentStep = step;
+
+        $('.step').hide();
+        $('#' + step).show();
+    }
+
     function save() {
+        var futureUtcTime = $('#future-utc-time').val();
+        var userTimeZone = $('#user-time-zone').val();
         var postcardURLValue = $('#postcard-url').val();
         var postcardTextValue = $('#postcard-text').val();
 
         payload['arguments'].execute.inArguments = [{
-            "tokens": authTokens
+            "tokens": authTokens,
+            "futureUtcTime": futureUtcTime,
+            "userTimeZone": userTimeZone
         }];
         
         payload['metaData'].isConfigured = true;
