@@ -5,42 +5,64 @@ import os
 
 app = Flask(__name__)
 
-def get_time_difference(future_date_str, user_timezone_str):
+def parse_timezone_offset(tz):
     try:
-        # Parse the future date string
-        future_date = datetime.strptime(future_date_str, "%Y-%m-%d %H:%M:%S")
-        
-        # Get the user's timezone
-        user_timezone = pytz.timezone(user_timezone_str)
-        
-        # Localize the future date to the user's timezone
-        future_date_localized = user_timezone.localize(future_date)
-        
-        # Get the current time in the user's timezone
-        current_time = datetime.now(user_timezone)
-        
-        # Calculate the difference
-        time_difference = future_date_localized - current_time
-        
-        return time_difference
-    except Exception as e:
-        return str(e)
+        hours, minutes = map(int, tz[3:].split(':'))
+        offset = datetime.timedelta(hours=hours, minutes=minutes)
+        return offset
+    except ValueError:
+        return None
 
-@app.route('/time_difference', methods=['POST'])
-def time_difference():
+@app.route('/execute', methods=['POST'])
+def execute():
     data = request.json
-    future_date_str = data.get('future_date')
-    user_timezone_str = data.get('user_timezone')
+    in_arguments = data['inArguments'][0]
+    future_utc_time = in_arguments.get('futureUtcTime')
+    user_time_zone = in_arguments.get('userTimeZone')
+
+    if not future_utc_time or not user_time_zone:
+        return jsonify({'error': 'Invalid input'}), 400
+
+    try:
+        current_utc_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+        future_utc_datetime = datetime.datetime.strptime(future_utc_time, '%H:%M:%S').replace(
+            year=current_utc_time.year, 
+            month=current_utc_time.month, 
+            day=current_utc_time.day, 
+            tzinfo=pytz.utc
+        )
+
+        offset = parse_timezone_offset(user_time_zone)
+        if offset is None:
+            return jsonify({'error': 'Invalid time zone format.'}), 400
+
+        current_time_user_tz = current_utc_time + offset
+        time_difference = future_utc_datetime - current_time_user_tz
+
+        return jsonify({'timeDifference': str(time_difference)}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/publish', methods=['POST'])
+def publish():
+    return jsonify({}), 200
     
-    if not future_date_str or not user_timezone_str:
-        return jsonify({"error": "Invalid input"}), 400
+@app.route('/validate', methods=['POST'])
+def validate():
+    data = request.json
+    in_arguments = data['arguments']['execute']['inArguments']
 
+    if not in_arguments:
+        return jsonify({'error': 'No configuration data provided'}), 400
+
+    future_utc_time = in_arguments[0].get('futureUtcTime')
+    user_time_zone = in_arguments[0].get('userTimeZone')
     time_difference = get_time_difference(future_date_str, user_timezone_str)
-    if isinstance(time_difference, str):
-        return jsonify({"error": time_difference}), 400
+    return jsonify({}), 200
 
-    return jsonify({"time_difference": str(time_difference)})
-
+@app.route('/stop', methods=['POST'])
+def stop():
+    return jsonify({}), 200
 @app.route('/')
 def serve_html():
     return send_from_directory('.', 'index.html')
