@@ -8,8 +8,8 @@
     "type": "REST",
     "lang": {
         "en-US": {
-            "name": "Template",
-          "description": "A Template for a custom Journey Builder activity",
+            "name": "DeltaTime",
+          "description": "A custom Journey Builder activity",
           "step1Label": "Configure Activity"
         }
     },
@@ -25,10 +25,7 @@
       ],
       "outArguments": [
         {
-          "timeDifference": {
-            "dataType": "Text",
-            "isNullable": false
-          }
+          "timeDifference": ""
         }
       ],
           "url": "https://journey-builder-activity-template-lnph.onrender.com/execute",
