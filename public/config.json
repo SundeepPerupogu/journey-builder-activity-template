@@ -17,7 +17,7 @@
         "execute": {
            "inArguments":[],
           "outArguments": [],
-          "url": "https://journey-builder-activity-template-lnph.onrender.com",
+          "url": "https://journey-builder-activity-template-1.onrender.com",
            "verb": "POST",
             "body": "",
             "header": "",
@@ -28,22 +28,22 @@
     },
     "configurationArguments": {
       "save": {
-        "url": "https://journey-builder-activity-template-lnph.onrender.com",
+        "url": "https://journey-builder-activity-template-1.onrender.com/save",
           "verb": "POST",
         "useJwt": true
        },
        "publish": {
-        "url": "https://journey-builder-activity-template-lnph.onrender.com",
+        "url": "https://journey-builder-activity-template-1.onrender.com/publish",
            "verb": "POST",
         "useJwt": true
        },
       "stop": {
-        "url": "https://journey-builder-activity-template-lnph.onrender.com",
+        "url": "https://journey-builder-activity-template-1.onrender.com/stop",
            "verb": "POST",
         "useJwt": true
       },
       "validate": {
-        "url": "https://journey-builder-activity-template-lnph.onrender.com",
+        "url": "https://journey-builder-activity-template-1.onrender.com/validate",
         "verb": "POST",
         "useJwt": true
       }
